@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">Gestor de Postulantes</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02"
+            aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor02">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/dashboard">Postulantes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/perfil">Mi Perfil</a>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <a class="btn btn-secondary my-2 my-sm-0" style="margin: 1em;" href="/user/signout">Cerrar Sesion</a>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<h1 class="center" style="padding-top: 1em;">Dashboard de Postulantes</h1>
+
+<div class="card-wrapper">
+    <div class="card">
+        <!-- Formulario para registrar postulante -->
+        <form method="post" action="/registrar_postulante">
+            <input type="text" name="IDHASH" placeholder="IDHASH" required value="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6">
+
+            <input type="text" name="COLEGIO" placeholder="COLEGIO" list="colegios" required>
+            <datalist id="colegios">
+                <option value="Colegio Nacional San Martín">
+                <option value="Colegio Santa Rosa">
+                <option value="Colegio La Merced">
+                <option value="Colegio Trilce">
+                <option value="Colegio Innova Schools">
+                <option value="Colegio Saco Oliveros">
+                <option value="Colegio Pamer">
+                <option value="Colegio San Agustín">
+                <option value="Colegio María Reina">
+                <option value="Colegio La Salle">
+            </datalist>
+
+            <select name="COLEGIO_DEPA" required>
+                <option value="">Selecciona Departamento</option>
+                <option value="Lima">Lima</option>
+                <option value="Cusco">Cusco</option>
+                <option value="Arequipa">Arequipa</option>
+                <option value="Piura">Piura</option>
+                <option value="Junín">Junín</option>
+                <option value="La Libertad">La Libertad</option>
+                <option value="Loreto">Loreto</option>
+                <option value="Callao">Callao</option>
+                <option value="Tacna">Tacna</option>
+                <option value="Ayacucho">Ayacucho</option>
+            </select>
+
+            <select name="COLEGIO_PROV" required>
+                <option value="">Selecciona Provincia</option>
+                <option value="Lima">Lima</option>
+                <option value="Cusco">Cusco</option>
+                <option value="Arequipa">Arequipa</option>
+                <option value="Trujillo">Trujillo</option>
+                <option value="Huancayo">Huancayo</option>
+            </select>
+
+            <select name="COLEGIO_DIST" required>
+                <option value="">Selecciona Distrito</option>
+                <option value="Miraflores">Miraflores</option>
+                <option value="San Borja">San Borja</option>
+                <option value="Surco">Surco</option>
+                <option value="San Isidro">San Isidro</option>
+                <option value="La Molina">La Molina</option>
+            </select>
+
+            <input type="text" name="COLEGIO_PAIS" placeholder="COLEGIO_PAIS" list="paises" required>
+            <datalist id="paises">
+                <option value="Perú">
+                <option value="Chile">
+                <option value="Argentina">
+                <option value="Ecuador">
+                <option value="Colombia">
+            </datalist>
+
+            <input type="number" name="COLEGIO_ANIO_EGRESO" placeholder="Año de egreso" min="2000" max="2025" required>
+
+            <input type="text" name="ESPECIALIDAD" placeholder="ESPECIALIDAD" list="especialidades" required>
+            <datalist id="especialidades">
+                <option value="Ciencias">
+                <option value="Letras">
+                <option value="Tecnología">
+                <option value="Comercio">
+            </datalist>
+
+            <input type="number" name="ANIO_POSTULA" placeholder="Año de postulación" min="2020" max="2025" required>
+
+            <input type="text" name="CICLO_POSTULA" placeholder="Ciclo de postulación" list="ciclos" required>
+            <datalist id="ciclos">
+                <option value="2024-2">
+                <option value="2025-1">
+                <option value="2023-2">
+            </datalist>
+
+            <select name="DOMICILIO_DEPA" required>
+                <option value="">Selecciona Departamento de domicilio</option>
+                <option value="Lima">Lima</option>
+                <option value="Cusco">Cusco</option>
+                <option value="Arequipa">Arequipa</option>
+            </select>
+
+            <select name="DOMICILIO_PROV" required>
+                <option value="">Selecciona Provincia de domicilio</option>
+                <option value="Lima">Lima</option>
+                <option value="Cusco">Cusco</option>
+                <option value="Arequipa">Arequipa</option>
+            </select>
+
+            <select name="DOMICILIO_DIST" required>
+                <option value="">Selecciona Distrito de domicilio</option>
+                <option value="Miraflores">Miraflores</option>
+                <option value="San Borja">San Borja</option>
+                <option value="Surco">Surco</option>
+            </select>
+
+            <input type="number" name="ANIO_NACIMIENTO" placeholder="Año de nacimiento" min="1980" max="2025" required>
+
+            <input type="text" name="NACIMIENTO_PAIS" placeholder="País de nacimiento" list="paises" required>
+            <input type="text" name="NACIMIENTO_DEPA" placeholder="Departamento de nacimiento" list="departamentos" required>
+            <datalist id="departamentos">
+                <option value="Lima">
+                <option value="Cusco">
+                <option value="Arequipa">
+            </datalist>
+            <input type="text" name="NACIMIENTO_PROV" placeholder="Provincia de nacimiento" required>
+            <input type="text" name="NACIMIENTO_DIST" placeholder="Distrito de nacimiento" required>
+
+            <select name="SEXO" required>
+                <option value="">Selecciona Sexo</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+            </select>
+
+            <input type="number" step="0.01" name="CALIF_FINAL" placeholder="Calificación final" min="0" max="20" required>
+            <select name="INGRESO" required>
+                <option value="">¿Ingresó?</option>
+                <option value="Sí">Sí</option>
+                <option value="No">No</option>
+            </select>
+
+            <input type="text" name="MODALIDAD" placeholder="MODALIDAD" list="modalidades" required>
+            <datalist id="modalidades">
+                <option value="Ordinario">
+                <option value="Extraordinario">
+                <option value="Especial">
+            </datalist>
+
+            <input type="date" name="FECHA_DE_CORTE" placeholder="Fecha de corte" required>
+
+            <button type="submit">Registrar Postulante</button>
+        </form>
+
+       
+    </div>
+</div>
+{% endblock %}
+

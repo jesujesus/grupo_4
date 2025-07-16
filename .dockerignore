@@ -1,0 +1,66 @@
+# Ignorar el entorno virtual
+venv/
+.venv/
+env/
+
+# Ignorar archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.Python
+build/
+dist/
+develop-eggs/
+.installed.cfg
+
+# Ignorar archivos de Git
+.git/
+.gitignore
+
+# Ignorar archivos de Docker (si tu Dockerfile o docker-compose.yml están en un subdirectorio)
+# En tu caso actual, no es necesario ignorar el Dockerfile o docker-compose.yml
+# si están en el mismo directorio raíz de la aplicación.
+# Dockerfile
+# docker-compose.yml
+
+# Ignorar archivos de configuración sensibles o locales
+.env
+*.env
+*.ini
+*.conf
+*.yml
+*.yaml
+# Si tienes algún archivo específico con credenciales, añádelo aquí
+# Por ejemplo: config.py (si contiene credenciales directamente)
+
+# Ignorar archivos de logs
+*.log
+logs/
+
+# Ignorar archivos de base de datos locales
+*.sqlite
+*.db
+*.sqlite3
+/data/ # Si tienes una carpeta 'data' para bases de datos locales
+
+# Ignorar archivos de editor/IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store # Archivos de macOS
+
+# Ignorar archivos de Terraform (si estuvieran en el mismo directorio de la app, lo cual no es tu caso actual)
+# .terraform/
+# .terraform.lock.hcl
+# terraform.tfstate
+# terraform.tfstate.backup
+# *.tfvars
+# *.tfvars.json
+
+# Ignorar archivos de datos grandes o temporales que no son parte del código fuente
+# Por ejemplo, si tu archivo CSV 'postulantes_2021-1_2024-1.csv' es muy grande
+# y no quieres que se copie en la imagen final, podrías ignorarlo aquí.
+# postulantes_2021-1_2024-1.csv

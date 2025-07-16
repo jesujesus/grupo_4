@@ -1,0 +1,16 @@
+# Archivos de Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform.lock.hcl
+
+# Logs de Terraform
+*.log
+
+# Archivos específicos de entornos de desarrollo (opcional)
+# .vscode/
+
+# Otros archivos/directorios a ignorar (si aplica)
+# venv/ # Si tu entorno virtual está dentro de esta carpeta
+# __pycache__/
