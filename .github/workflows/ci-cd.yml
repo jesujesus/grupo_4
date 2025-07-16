@@ -18,7 +18,7 @@ jobs:
         image: mongo:latest  # Ejecutar un contenedor de MongoDB para las pruebas
         ports:
           - 27017:27017     # Exponer el puerto de MongoDB
-        options: --health-cmd="mongo --eval 'db.adminCommand(\"ping\")' --quiet"  # Asegurarse de que MongoDB esté listo
+        options: --health-cmd="mongo --eval 'db.adminCommand(\"ping\")' --quiet" --health-interval=10s --health-timeout=5s --health-retries=5
 
     steps:
       - name: Check out the repository
@@ -33,6 +33,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip  # Actualizar pip
           pip install -r requirements.txt   # Instalar las dependencias de Python
+
+      - name: Test MongoDB connection
+        run: |
+          until nc -zv 127.0.0.1 27017; do
+            echo "Waiting for MongoDB to start..."
+            sleep 5
+          done
+          echo "MongoDB is ready!"
 
       - name: Run tests
         run: |
