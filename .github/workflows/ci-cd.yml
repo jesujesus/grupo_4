@@ -10,7 +10,7 @@ on:
       - main   # Ejecutar también en 'pull requests' hacia la rama 'main'
 
 jobs:
-  # Job de pruebas (Ejecutar tests de la aplicación)
+  # Job de pruebas (Ahora solo verifica dependencias y conexión a MongoDB)
   test:
     runs-on: ubuntu-latest    # Utiliza una máquina virtual Ubuntu para ejecutar este job
     services:
@@ -18,7 +18,7 @@ jobs:
         image: mongo:5.0   # Cambiar la versión para usar una más estable
         ports:
           - 27017:27017     # Exponer el puerto de MongoDB
-        options: --health-cmd="mongo --eval 'db.adminCommand(\"ping\")' --quiet" --health-interval=10s --health-timeout=5s --health-retries=5
+        options: --health-cmd="mongo --eval 'db.adminCommand(\"ping\")' --health-interval=10s --health-timeout=5s --health-retries=5
 
     steps:
       - name: Check out the repository
@@ -32,6 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip   # Actualizar pip
+          cd python-flask-mongodb-crud-task/ # Navega al directorio de la aplicación para instalar dependencias
           pip install -r requirements.txt   # Instalar las dependencias de Python
 
       - name: Increase vm.max_map_count
@@ -45,14 +46,15 @@ jobs:
           done
           echo "MongoDB is ready!"
 
-      #- name: Run tests
-        # CAMBIO AQUÍ: Ejecutar pytest como un módulo de Python
-        #run: |
-         # python -m pytest tests/   # Ejecutar los tests con pytest (si tienes tests en la carpeta 'tests')
+      # El paso 'Run tests' ha sido ELIMINADO para la máxima simplicidad,
+      # ya que no tienes una carpeta 'tests/'.
+      # Si en el futuro añades tests, deberás reintroducir este paso.
 
   # Job para construir y subir la imagen Docker
   build_and_push_docker_image:
-    needs: test   # Este job depende de que 'test' haya sido exitoso
+    # Este job ahora solo necesita que el job 'test' haya terminado (sin errores)
+    # El job 'test' ahora solo verifica la instalación de dependencias y la conexión a MongoDB.
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
@@ -68,47 +70,39 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        # Asegúrate de que este comando se ejecuta en el directorio correcto si tu Dockerfile no está en la raíz del repo
-        # Por ejemplo, si tu Dockerfile está en python-flask-mongodb-crud-task/, necesitarías:
-        # run: |
-        #   cd python-flask-mongodb-crud-task/
-        #   docker build -t my-flask-app .
         run: |
+          cd python-flask-mongodb-crud-task/ # Navega al directorio donde está el Dockerfile
           docker build -t my-flask-app .   # Construir la imagen con el Dockerfile en la raíz
 
       - name: Push Docker image to Docker Hub
-        # Asegúrate de que el nombre de la imagen coincida con el nombre que usaste en el paso 'Build Docker image'
         run: |
           docker push my-flask-app   # Subir la imagen a Docker Hub
 
   # Job para desplegar la infraestructura con Terraform (opcional)
   terraform:
-    needs: build_and_push_docker_image   # Este job depende de que 'build_and_push_docker_image' haya sido exitoso
+    needs: build_and_push_docker_image
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
         uses: actions/checkout@v2
 
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1   # Instalar Terraform
+        uses: hashicorp/setup-terraform@v1
 
       - name: Initialize Terraform
-        # Si tu configuración de Terraform está en mi-atlas-terraform/, necesitas navegar a esa carpeta
-        # run: |
-        #   cd mi-atlas-terraform/
-        #   terraform init
-        run: terraform init   # Inicializar la configuración de Terraform
+        run: |
+          cd python-flask-mongodb-crud-task/mi-atlas-terraform/ # Navega al directorio de Terraform
+          terraform init
 
       - name: Terraform Plan
-        # Si tu configuración de Terraform está en mi-atlas-terraform/, necesitas navegar a esa carpeta
-        # run: |
-        #   cd mi-atlas-terraform/
-        #   terraform plan
-        run: terraform plan   # Ver qué cambios va a hacer Terraform
+        run: |
+          cd python-flask-mongodb-crud-task/mi-atlas-terraform/ # Navega al directorio de Terraform
+          terraform plan
 
       - name: Apply Terraform
-        # Si tu configuración de Terraform está en mi-atlas-terraform/, necesitas navegar a esa carpeta
-        # run: |
-        #   cd mi-atlas-terraform/
-        #   terraform apply -auto-approve
-        run: terraform apply -auto-approve   # Aplicar los cambios sin necesidad de confirmación
+        env:
+          MONGODB_ATLAS_PUBLIC_KEY: ${{ secrets.MONGODB_ATLAS_PUBLIC_KEY }}
+          MONGODB_ATLAS_PRIVATE_KEY: ${{ secrets.MONGODB_ATLAS_PRIVATE_KEY }}
+        run: |
+          cd python-flask-mongodb-crud-task/mi-atlas-terraform/ # Navega al directorio de Terraform
+          terraform apply -auto-approve
