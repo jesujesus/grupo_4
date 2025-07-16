@@ -71,8 +71,8 @@ instance/       # Folder for instance-specific data (e.g., SQLite DB, config 
 .env            # General environment variable file (VERY IMPORTANT to ignore for sensitive data)
 *.ini           # Configuration files (if they contain sensitive data)
 *.conf
-*.yml
-*.yaml
+#*.yml
+#*.yaml
 # You might have a specific config file for your MongoDB connection string,
 # e.g., config.py or db_config.py, if it contains credentials.
 # If so, add it here, e.g.:
