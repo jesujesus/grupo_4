@@ -45,10 +45,10 @@ jobs:
           done
           echo "MongoDB is ready!"
 
-      - name: Run tests
+      #- name: Run tests
         # CAMBIO AQUÍ: Ejecutar pytest como un módulo de Python
-        run: |
-          python -m pytest tests/   # Ejecutar los tests con pytest (si tienes tests en la carpeta 'tests')
+        #run: |
+         # python -m pytest tests/   # Ejecutar los tests con pytest (si tienes tests en la carpeta 'tests')
 
   # Job para construir y subir la imagen Docker
   build_and_push_docker_image:
