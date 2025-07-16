@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest    # Utiliza una máquina virtual Ubuntu para ejecutar este job
     services:
       mongodb:
-        image: mongo:latest  # Ejecutar un contenedor de MongoDB para las pruebas
+        image: mongo:5.0  # Cambiar la versión para usar una más estable
         ports:
           - 27017:27017     # Exponer el puerto de MongoDB
         options: --health-cmd="mongo --eval 'db.adminCommand(\"ping\")' --quiet" --health-interval=10s --health-timeout=5s --health-retries=5
@@ -27,12 +27,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'  # Instalar Python 3.9
+          python-version: '3.11'  # Instalar Python 3.11
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip  # Actualizar pip
           pip install -r requirements.txt   # Instalar las dependencias de Python
+
+      - name: Increase vm.max_map_count
+        run: sudo sysctl -w vm.max_map_count=16777220  # Ajustar parámetro de memoria
 
       - name: Test MongoDB connection
         run: |
