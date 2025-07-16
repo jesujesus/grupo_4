@@ -1,0 +1,34 @@
+# Versión de la especificación de Docker Compose
+version: '3.8'
+
+# Define los servicios (contenedores) que componen tu aplicación
+services:
+  # 'web' es el nombre de tu servicio de aplicación Flask
+  web:
+    # Indica a Docker Compose que construya la imagen para este servicio
+    # usando el Dockerfile que se encuentra en el directorio actual ('.').
+    build: .
+
+    # Mapea los puertos entre el host (tu máquina) y el contenedor.
+    # "5000:5000" significa: puerto 5000 del host -> puerto 5000 del contenedor
+    ports:
+      - "5000:5000"
+
+    # Define variables de entorno para el contenedor.
+    # FLASK_APP: app.py le dice a Flask cuál es el archivo principal de la aplicación.
+    # FLASK_ENV: development activa el modo de desarrollo de Flask.
+    environment:
+      FLASK_APP: app.py
+      FLASK_ENV: development
+      # Si en el futuro usas variables de entorno para la conexión a MongoDB,
+      # y tienes un archivo .env en la misma carpeta, descomenta la siguiente línea:
+      # - MONGO_URI=${MONGO_URI}
+
+    # Monta un volumen para sincronizar el código fuente.
+    # Esto es MUY útil para el desarrollo: cualquier cambio que hagas en tus archivos locales
+    # (app.py, templates, static, etc.) se reflejará instantáneamente en el contenedor
+    # sin necesidad de reconstruir la imagen o reiniciar el contenedor manualmente.
+    # ".": se refiere al directorio actual en el host (donde está docker-compose.yml).
+    # "/app": se refiere al WORKDIR dentro del contenedor (definido en tu Dockerfile).
+    volumes:
+      - .:/app
